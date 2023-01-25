@@ -1,10 +1,10 @@
 resource "aws_iam_role" "bastion_role" {
-  count = var.create_bastion ? 1 : 0
+  count              = var.create_bastion ? 1 : 0
   assume_role_policy = jsonencode({
-    Version = "2012-10-17"
+    Version   = "2012-10-17"
     Statement = [
       {
-        Action = "sts:AssumeRole"
+        Action    = "sts:AssumeRole"
         Principal = {
           Service = "ec2.amazonaws.com"
         }
@@ -13,9 +13,9 @@ resource "aws_iam_role" "bastion_role" {
     ]
   })
   inline_policy {
-    name = "ec2costsaving"
+    name   = "ec2costsaving"
     policy = jsonencode({
-      Version = "2012-10-17"
+      Version   = "2012-10-17"
       Statement = [
         {
           Action = [
