@@ -16,7 +16,7 @@ resource "aws_route" "public_route_via_igw" {
 }
 
 resource "aws_route_table_association" "public_subnet_route_table_association" {
-  count          = var.az_count
+  count          = min(length(data.aws_availability_zones.azs.names), var.az_count)
   route_table_id = aws_route_table.route_via_igw.id
   subnet_id      = aws_subnet.public_subnet[count.index].id
 }

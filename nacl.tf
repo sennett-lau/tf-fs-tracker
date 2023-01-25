@@ -21,13 +21,13 @@ resource "aws_network_acl_rule" "outbound_network_acl_rule" {
 }
 
 resource "aws_network_acl_association" "public_subnet_network_acl_association" {
-  count          = var.az_count
+  count          = min(length(data.aws_availability_zones.azs.names), var.az_count)
   network_acl_id = aws_network_acl.network_acl.id
   subnet_id      = aws_subnet.public_subnet[count.index].id
 }
 
 resource "aws_network_acl_association" "private_subnet_network_acl_association" {
-  count          = var.az_count
+  count          = min(length(data.aws_availability_zones.azs.names), var.az_count)
   network_acl_id = aws_network_acl.network_acl.id
   subnet_id      = aws_subnet.private_subnet[count.index].id
 }
