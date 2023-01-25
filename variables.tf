@@ -56,16 +56,6 @@ variable "cidr" {
   }
 }
 
-variable "ami" {
-  description = "AMI ID"
-  type        = map(map(string))
-  default     = {
-    us-west-2 = {
-      bastion = "ami-00f7e5c52c0f43726"
-    }
-  }
-}
-
 variable "support_email" {
   description = "Support email address"
   type        = string

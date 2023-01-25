@@ -53,7 +53,7 @@ resource "aws_security_group" "bastion_security_group" {
 resource "aws_instance" "bastion_host" {
   count                  = var.create_bastion ? 1 : 0
   subnet_id              = aws_subnet.public_subnet[0].id
-  ami                    = var.ami.us-west-2.bastion
+  ami                    = data.aws_ami.bastion_ami.id
   instance_type          = "t3.nano"
   key_name               = var.bastion_key_name
   iam_instance_profile   = aws_iam_instance_profile.bastion_instance_profile[count.index].name
