@@ -3,8 +3,8 @@ resource "aws_sns_topic" "support_sns_topic" {
 }
 
 resource "aws_sns_topic_subscription" "support_sns_topic_subscription" {
-  topic_arn = aws_sns_topic.support_sns_topic.arn
-  protocol  = "email"
-  endpoint  = var.support_email
+  topic_arn  = aws_sns_topic.support_sns_topic.arn
+  protocol   = "email"
+  endpoint   = var.support_email
   depends_on = [aws_sns_topic.support_sns_topic]
 }
