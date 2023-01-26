@@ -5,13 +5,13 @@ terraform {
     }
   }
 
-  backend "s3" {
-    bucket = "terraform-bucket-name"
-    key    = "env/terraform.tfstate"
-    region = "us-west-2"
-
-    dynamodb_table = "terraform-env-state-table"
-  }
+#  backend "s3" {
+#    bucket = "terraform-bucket-name"
+#    key    = "env/terraform.tfstate"
+#    region = "us-west-2"
+#
+#    dynamodb_table = "terraform-env-state-table"
+#  }
 }
 
 provider "aws" {
