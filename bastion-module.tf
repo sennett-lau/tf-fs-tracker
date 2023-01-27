@@ -1,0 +1,72 @@
+resource "aws_iam_role" "bastion_role" {
+  name               = "${local.module_prefix}-bastion-role"
+  count              = local.create_bastion
+  assume_role_policy = jsonencode({
+    Version   = "2012-10-17"
+    Statement = [
+      {
+        Action    = "sts:AssumeRole"
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+        Effect = "Allow"
+      },
+    ]
+  })
+  inline_policy {
+    name   = "BastionExecutionPolicy"
+    policy = jsonencode({
+      Version   = "2012-10-17"
+      Statement = [
+        {
+          Action = [
+            "ec2:StartInstances",
+            "ec2:StopInstances",
+            "rds:StartDBInstance",
+            "rds:StopDBInstance",
+            "rds:DeleteDBInstance",
+          ]
+          Effect   = "Allow"
+          Resource = "*"
+        },
+      ]
+    })
+  }
+}
+
+resource "aws_iam_instance_profile" "bastion_instance_profile" {
+  count = local.create_bastion
+  role  = aws_iam_role.bastion_role[count.index].name
+  name  = "${local.module_prefix}-bastion-instance-profile"
+}
+
+resource "aws_security_group" "bastion_security_group" {
+  name        = "${local.module_prefix}-bastion-security-group"
+  count       = local.create_bastion
+  vpc_id      = module.vpc.vpc_id
+  description = "Used for Bastion Host"
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+module "bastion_host" {
+  source  = "terraform-aws-modules/ec2-instance/aws"
+  version = "4.3.0"
+
+  count                  = local.create_bastion
+  name                   = "${local.module_prefix}-bastion-host"
+  subnet_id              = module.vpc.public_subnets[0]
+  ami                    = data.aws_ami.bastion_ami.id
+  instance_type          = "t3.nano"
+  key_name               = var.bastion_key_name
+  iam_instance_profile   = aws_iam_instance_profile.bastion_instance_profile[count.index].name
+  vpc_security_group_ids = [aws_security_group.bastion_security_group[count.index].id]
+
+  tags = merge(local.common_tags, {
+    Name = "${local.module_prefix}-bastion-host"
+  })
+}

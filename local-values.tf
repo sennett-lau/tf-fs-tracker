@@ -11,4 +11,5 @@ locals {
     Environment = var.env
     Module      = var.module
   }
+  create_bastion = var.create_bastion ? 1 : 0
 }

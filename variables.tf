@@ -14,16 +14,3 @@ variable "support_email" {
   type        = string
   default     = "tech@example.com"
 }
-
-variable "bastion_key_name" {
-  description = "Bastion key name"
-  type        = string
-  default     = "fs-dev-admin-key"
-  nullable    = true
-}
-
-variable "create_bastion" {
-  description = "Create bastion host"
-  type        = bool
-  default     = false
-}
