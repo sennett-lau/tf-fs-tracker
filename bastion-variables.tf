@@ -10,3 +10,9 @@ variable "create_bastion" {
   type        = bool
   default     = false
 }
+
+variable "create_bastion_eip" {
+  description = "Create bastion host EIP"
+  type        = bool
+  default     = false
+}

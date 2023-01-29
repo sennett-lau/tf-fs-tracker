@@ -1,6 +1,7 @@
 resource "aws_iam_role" "bastion_role" {
-  name               = "${local.module_prefix}-bastion-role"
   count              = local.create_bastion
+
+  name               = "${local.module_prefix}-bastion-role"
   assume_role_policy = jsonencode({
     Version   = "2012-10-17"
     Statement = [
@@ -32,17 +33,27 @@ resource "aws_iam_role" "bastion_role" {
       ]
     })
   }
+
+    tags = merge(local.common_tags, {
+        Name = "${local.module_prefix}-bastion-role"
+    })
 }
 
 resource "aws_iam_instance_profile" "bastion_instance_profile" {
   count = local.create_bastion
+
   role  = aws_iam_role.bastion_role[count.index].name
   name  = "${local.module_prefix}-bastion-instance-profile"
+
+    tags = merge(local.common_tags, {
+        Name = "${local.module_prefix}-bastion-instance-profile"
+    })
 }
 
 resource "aws_security_group" "bastion_security_group" {
-  name        = "${local.module_prefix}-bastion-security-group"
   count       = local.create_bastion
+
+  name        = "${local.module_prefix}-bastion-security-group"
   vpc_id      = module.vpc.vpc_id
   description = "Used for Bastion Host"
   ingress {
@@ -51,6 +62,10 @@ resource "aws_security_group" "bastion_security_group" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  tags = merge(local.common_tags, {
+    Name = "${local.module_prefix}-bastion-security-group"
+  })
 }
 
 module "bastion_host" {
@@ -68,5 +83,20 @@ module "bastion_host" {
 
   tags = merge(local.common_tags, {
     Name = "${local.module_prefix}-bastion-host"
+  })
+}
+
+resource "aws_eip" "bastion_eip" {
+  count      = local.create_bastion_eip
+  depends_on = [
+    module.bastion_host,
+    module.vpc,
+  ]
+
+  vpc      = true
+  instance = module.bastion_host[0].id
+
+  tags     = merge(local.common_tags, {
+    Name = "${local.module_prefix}-bastion-eip"
   })
 }
