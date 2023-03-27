@@ -25,3 +25,5 @@ data "aws_ami" "bastion_ami" {
     values = ["x86_64"]
   }
 }
+
+data "aws_partition" "current" {}

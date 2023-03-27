@@ -13,4 +13,7 @@ locals {
   }
   create_bastion = var.create_bastion ? 1 : 0
   create_bastion_eip = var.create_bastion_eip && var.create_bastion ? 1 : 0
+  create_eks = var.create_eks ? 1 : 0
+  create_eks_public_ng = var.create_eks_public_node_group && var.create_eks ? 1 : 0
+  create_eks_private_ng = var.create_eks_private_node_group && var.create_eks ? 1 : 0
 }
