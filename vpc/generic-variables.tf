@@ -21,3 +21,9 @@ variable "module" {
   type        = string
   default     = "base"
 }
+
+variable "aws_profile" {
+  description = "AWS profile to use"
+  type        = string
+  default     = "default"
+}
