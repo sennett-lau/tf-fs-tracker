@@ -16,3 +16,9 @@ variable "create_bastion_eip" {
   type        = bool
   default     = false
 }
+
+variable "bastion_instance_type" {
+  description = "Bastion instance type"
+  type        = string
+  default     = "t3.nano"
+}

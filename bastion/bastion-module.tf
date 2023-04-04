@@ -1,5 +1,5 @@
 resource "aws_iam_role" "bastion_role" {
-  count              = local.create_bastion
+  count = local.create_bastion
 
   name               = "${local.module_prefix}-bastion-role"
   assume_role_policy = jsonencode({
@@ -34,24 +34,24 @@ resource "aws_iam_role" "bastion_role" {
     })
   }
 
-    tags = merge(local.common_tags, {
-        Name = "${local.module_prefix}-bastion-role"
-    })
+  tags = merge(local.common_tags, {
+    Name = "${local.module_prefix}-bastion-role"
+  })
 }
 
 resource "aws_iam_instance_profile" "bastion_instance_profile" {
   count = local.create_bastion
 
-  role  = aws_iam_role.bastion_role[count.index].name
-  name  = "${local.module_prefix}-bastion-instance-profile"
+  role = aws_iam_role.bastion_role[count.index].name
+  name = "${local.module_prefix}-bastion-instance-profile"
 
-    tags = merge(local.common_tags, {
-        Name = "${local.module_prefix}-bastion-instance-profile"
-    })
+  tags = merge(local.common_tags, {
+    Name = "${local.module_prefix}-bastion-instance-profile"
+  })
 }
 
 resource "aws_security_group" "bastion_security_group" {
-  count       = local.create_bastion
+  count = local.create_bastion
 
   name        = "${local.module_prefix}-bastion-security-group"
   vpc_id      = data.terraform_remote_state.vpc.outputs.vpc_id
@@ -76,7 +76,7 @@ module "bastion_host" {
   name                   = "${local.module_prefix}-bastion-host"
   subnet_id              = data.terraform_remote_state.vpc.outputs.public_subnets[0]
   ami                    = data.aws_ami.bastion_ami.id
-  instance_type          = "t3.nano"
+  instance_type          = var.bastion_instance_type
   key_name               = var.bastion_key_name
   iam_instance_profile   = aws_iam_instance_profile.bastion_instance_profile[count.index].name
   vpc_security_group_ids = [aws_security_group.bastion_security_group[count.index].id]
@@ -96,7 +96,7 @@ resource "aws_eip" "bastion_eip" {
   vpc      = true
   instance = module.bastion_host[0].id
 
-  tags     = merge(local.common_tags, {
+  tags = merge(local.common_tags, {
     Name = "${local.module_prefix}-bastion-eip"
   })
 }
