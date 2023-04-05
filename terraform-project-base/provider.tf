@@ -10,7 +10,7 @@ terraform {
     key    = "env/terraform.tfstate"
     region = "us-west-2"
 
-    dynamodb_table = "terraform-env-state-table"
+    dynamodb_table = "terraform-state-table-env"
   }
 }
 
