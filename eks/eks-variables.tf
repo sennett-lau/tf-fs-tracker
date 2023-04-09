@@ -1,19 +1,19 @@
 variable "cluster_name" {
   description = "The name of the cluster"
-  type = string
-  default = "eks-cluster"
+  type        = string
+  default     = "eks-cluster"
 }
 
 variable "cluster_version" {
   description = "The desired Kubernetes version for your cluster. If you do not specify a value, the latest version available in Amazon EKS is used."
-  type = string
-  default = "1.22"
+  type        = string
+  default     = "1.22"
 }
 
 variable "cluster_service_ipv4_cidr" {
   description = "The CIDR block that Kubernetes service IP addresses are assigned from. If you don't specify a CIDR block"
-  type = string
-  default = "172.20.0.0/16"
+  type        = string
+  default     = "172.20.0.0/16"
 }
 
 variable "cluster_endpoint_private_access" {
@@ -36,14 +36,14 @@ variable "cluster_endpoint_public_access_cidrs" {
 
 variable "create_eks_public_node_group" {
   description = "Create EKS node group"
-  type = bool
-  default = true
+  type        = bool
+  default     = true
 }
 
 variable "create_eks_private_node_group" {
   description = "Create EKS node group"
-  type = bool
-  default = true
+  type        = bool
+  default     = true
 }
 
 # EKS OIDC ROOT CA Thumbprint - valid until 2037
