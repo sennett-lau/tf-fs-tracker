@@ -8,3 +8,7 @@ data "terraform_remote_state" "vpc" {
     region = "us-west-2"
   }
 }
+
+data "aws_eks_cluster_auth" "eks_cluster" {
+  name = aws_eks_cluster.eks_cluster.name
+}
