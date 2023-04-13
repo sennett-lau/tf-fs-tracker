@@ -3,6 +3,10 @@ terraform {
     aws = {
       source = "hashicorp/aws"
     }
+
+    http = {
+      source = "hashicorp/http"
+    }
   }
 
   backend "s3" {
@@ -18,4 +22,8 @@ provider "aws" {
   region                   = var.aws_region
   shared_credentials_files = ["~/.aws/credentials"]
   profile                  = var.aws_profile
+}
+
+provider "http" {
+  version = "~> 2.0"
 }
